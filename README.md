@@ -12,7 +12,7 @@ The containerised desktop environment supports hardware-accelerated graphics, a 
 
 - **Steam Client Support**: The image installs the official Steam distribution.
 
-- **Persistent Storage Architecture**: Game data and Steam user configuration are externalised via bind mounts or named volumes, enabling persistence across container lifecycle operations (creation, restart, rebuild, or upgrade).
+- **Persistent Storage**: Game data and Steam user configuration are stored externally via bind mounts or named volumes, ensuring persistence across container lifecycle events such as creation, restart, rebuild, or upgrade.
 
 - **Hardware Acceleration**: Leverages NVIDIA Container Toolkit and Direct Rendering Infrastructure (DRI) devices to expose GPU acceleration into the containerised desktop session, ensuring efficient execution of graphics-intensive workloads.
 
@@ -22,9 +22,7 @@ The containerised desktop environment supports hardware-accelerated graphics, a 
 
 ## Directory and Volume Mapping
 
-To persist all Steam runtime files, game libraries, and user configuration, mount the following directories:
-
-_Yet to be implemented_
+To persist all Steam runtime files, game libraries, and user configuration, bind mount or map a volume to `/home/ubuntu/.steam/` directory.
 
 > Note: The default container user is `ubuntu`.
 
@@ -45,10 +43,11 @@ _Yet to be implemented_
 ```bash
 podman run -d \
    --name steam \
-   --restart=no \
+   --restart=unless-stopped \
    --security-opt label=disable \
    --tmpfs /dev/shm:rw \
    --gpus 0 \
+   -v steam-data:/home/ubuntu/.steam/ \
    -e TZ=Asia/Kolkata \
    -e SELKIES_TURN_PROTOCOL=udp \
    -e SELKIES_TURN_PORT=3478 \

@@ -10,4 +10,7 @@ RUN add-apt-repository multiverse && \
     apt-get install -y steam && \
     rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /home/ubuntu/.steam/ && \
+    chown -R ubuntu:ubuntu /home/ubuntu/.steam/
+
 USER 1000
